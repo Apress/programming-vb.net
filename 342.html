@@ -1,0 +1,363 @@
+<html>
+<body>
+<FONT face="Arial,Helvetica,Univers,Zurich BT" size=-1>
+<H3>There is an error in the Threading chapter that survived the first two printings (which is rather embarrassing I must confess
+since I say what one needs to do and then don't do it correctly).
+It was <it> finally</it> changed in the third printing.</H3>
+<p>
+On page 420-421 I talk about the importance of using a <b>MethodInvoker</b> to call into GUI thread from outside of it. The problem is I then I didn't write the code that uses
+the <b>MethodInvoker</b> method the correct way. You have to call it using the <b>Invoke</b> method of the <b>Control</b> class so please replace this line
+on page 421:
+</p>
+<p><font SIZE  +2><pre>myInvoker.Invoke</pre></font></p>
+by
+<p><font SIZE  +2><pre>m_Button.Invoke(myInvoker)</pre></font></p>
+
+
+<H3>These are the errata/changes from the first printing to the second printing. The first group are bugs
+or serious typos, the remaining ones are cosmetic improvements or clarifications.
+</H3>
+<B>p156, first printing:</b> The program on p156 has a bug. (Interestingly enough it is correct in the program that extends this example
+on page 366). Oh well. In any case the problem is I neglected to store the value of the
+shared instance field m_EmployeeID in an instance field of the individual class.
+Here is the correct code with the new/changed lines in bold
+</p>
+<P>
+<pre>
+Public Class Employee
+    Private m_Name As String
+    Private m_Salary As Decimal
+    Private Shared m_EmployeeID As Integer = 10000<B>
+    Private m_MyID As Integer</b>
+    Public Sub New(ByVal thesName As String, ByVal curSalary As Decimal)
+       m_Name = thesName
+       m_Salary = curSalary
+       m_EmployeeID = m_EmployeeID + 1 <B>
+       m_MyID = m_EmployeeID</B>
+  End Sub
+  ReadOnly Property EmployeeId() As Integer<B>
+     Get
+        Return m_MyID
+     End Get</B>
+  End Property
+  ReadOnly Property TheName() As String
+    Get
+      TheName = m_Name
+    End Get
+  End Property
+  ReadOnly Property Salary() As Decimal
+    Get
+      Salary = m_Salary
+    End Get
+  End Property
+End Class
+</pre>
+</p>
+<p>
+<B>p224, first printing:</b> In the program on page 224 I neglected to have <B>Option Strict On</B>
+so the program as printed will run as is even though there are potentially lossy conversions being made automatically.
+This of course is not what I advocate so
+strongly so <i>please</i> replace this program with the following <B>Option Strict On</B>
+compatible code where the changed lines are in bold:
+</p>
+<p>
+<pre>
+Public Class EmbeddedObjects
+    Implements ICloneable
+    Private m_Data() As String
+    Public Sub New(ByVal anArray() As String)
+        m_Data = anArray
+    End Sub
+    Public Function Clone() As Object _
+    Implements ICloneable.Clone
+        Dim temp() As String<B>
+        temp = CType(m_Data.Clone, String()) 'clone the array</B>
+        Return New EmbeddedObjects(temp)
+    End Function
+    Public Sub DisplayData()
+        Dim temp As String
+        For Each temp In m_Data
+            Console.WriteLine(temp)
+        Next
+    End Sub
+    Public Sub ChangeData(ByVal newData As String)
+        m_Data(0) = newData
+    End Sub
+End Class
+</pre>
+</p>
+<P>
+Page 21: First TIP should not be:<PRE># End Region</PRE> but should read:<PRE>#End region</PRE> (i.e. no space).
+</p>
+<p>
+Page 121: First sentence, delete the word “solution’s” and replace with “project’s”.
+</p>
+<p>
+Page 141: In last sentence delete the word “project” and replace with “assembly”.
+</p>
+<p>
+Page 143: In the CAUTION box, first sentence, delete the word “program” and replace with “assembly”.
+</p>
+<p>
+p227: In spite of pointing out the need for setting m_Index = -1, I neglected to do it in the Reset method (line 26).the program on page 224
+</p>
+<p>
+Page 291: First NOTE, the two middle lines of code should be replaced with:
+<PRE>Dim myForm As New System.Windows.Forms.Form()
+System.Windows.Forms.Application.Run(myForm)</PRE>
+</p>
+<p>
+Page 343: Fifth to last line of code, parentheses should be placed around the following code so it reads:
+<PRE>(aFile.Attributes And FileAttributes.Hidden)</PRE>
+</p>
+<p>
+<h3>The following are basically cosmetic changes or clarifications that were
+made to the second printing.
+</h3>
+</P>
+<P>
+Page xiii: Second paragraph, after the fourth sentence, insert:
+“Allen Holub helped me understand the intricacies of multithreading programs by
+reading and commenting on Chapter 10 under great time pressure.”
+</P>
+<P>
+<B>Chapter 1</B>
+</P>
+Page 3: Paragraph before The .NET Mentality Shift, the last sentence should read: “Whether you stick with VB5 or VB6 or shift to VB. NET, we cannot imagine writing a serious VB app without them.”
+</P>
+<P>
+Page 6: First paragraph after section break, second sentence, which is in parentheses, should read: “(A circular reference usually occurs when you have object A referring to object B and object B referring to object A.)”
+</P>
+<P>
+<B>Chapter 2</B>
+</P>
+Page 13: In the third paragraph, the text has been added to the end of the second sentence
+so it reads: “When you do so, you will see a dialog box like the one shown
+in Figure 2-2, where we scrolled roughly halfway through the list of possible projects and expanded the dialog box by clicking on the More button.”
+</P>
+<P>
+Page 15: Figure 2-3 has been replaced
+</P>
+<P>
+Page 16: Figure 2-4 has been replaced
+</P>
+<P>
+Page 25: In the TIP, should delete second “to have” from last sentence.
+</P>
+<P>
+Page 25: Table: First ICON should read: “Display a categorized list of properties.”
+Third ICON has been replaced, and the text changed to: “Display the properties for an object. When you are dealing with objects that have events associated with them, you can see them here as well.”
+Fourth ICON text reads: “Displays a Property Page for the property if one is supplied. (As in VB6, Property Pages are an aid in setting more complicated properties.)”
+</P>
+<P>
+Page 28: First line after Working with a Solution has a typo and should read: “Let us return to the simple vb_ide_01 you saw earlier …”
+</P>
+<P>
+Page 37: Figure 2-23 has been replaced
+</P>
+<P>
+Page 38: Figure 2-25 has been replaced
+</P>
+<P>
+Page 39: Last sentence before headline Debug vs. Release Versions has been cut. The new text reads: “In RC0 there is a general “enable Optimization” box but what exactly this does is not completely clear.”
+</P>
+<P>
+<B>Chapter 3</B>
+</P>
+Page 48: The third paragraph after Module Test1 should read: “and tried to run the console application, you would get an error message. For example you might see: Sub Main was not found in Test.Module1”.
+</P>
+<P>
+Page 48: Item number two should read: “Change the name of the module in the Solution Explorer to match”.
+ Item number four should read: “In the dialog box that appears (see Figure 3-1), make sure the startup Object is set to the name of the module or Sub Main. (VB .NET will automatically search for a Sub Main if you use the name of the module as a startup object.)”
+</P>
+<P>
+Page 49: The sentence below Figure 3-1 should read: “As with VB6, you can have multiple modules in a VB .Net program (or solution) but only one of them can have its Sub Main be the startup code.”
+Last paragraph, insert the word “style” between DOS and window.
+</P>
+<P>
+Page 50: In the last line on the page, delete the text: “see the following Note.)”
+</P>
+<P>
+Page 52: In the NOTE, delete the text: “it is likely that”.
+</P>
+<P>
+Page 52: In the last paragraph, replace 255 with 16,383.
+</P>
+<P>
+Page 55: In the NOTE delete “instances of”.
+</P>
+<P>
+Page 59: In the third paragraph, last sentence, insert the text, “when Option Strict is on” before the parentheses.
+</P>
+<P>
+Page 68: In the second line of code, insert a single quote mark before the word: one
+</P>
+<P>
+Page 68: The first batch of code after “You will see” has been reset:
+<PRE> MISSISSIPPI
+ mississippi
+Mississippi
+False
+False
+3
+ Mississi reverppi</PRE>
+</P>
+<P>
+Page 71: In the last sentence of the third paragraph, the text should read: “(Also note that in a more realistic program we would have to parse the result, for example using the members of the System.Convert class, because users rarely enter data correctly.)”
+</P>
+<P>
+Page 72: In the paragraph after Table 3-8, insert this text after the word “Double”: “when used with the Integer type”
+</P>
+<P>
+Page 75: In the first paragraph, the number 255 should be replaced with 16, 383
+</P>
+<P>
+Page 89: The indentation of the code after the second paragraph has been altered, with the last line moved back two spaces.
+</P>
+<P>
+Page 90: In the paragraph after the NOTE, the second sentence should read: “With Option Strict on, the types must be compatible as well, so only widening conversions will be made automatically. If a function uses ByRef then you must make call a conversion function.”
+</P>
+<P>
+Page 91: Text should be added before the last sentence: “The Exit function statement does this. Also …”
+</P>
+<P>
+Page 92: In the last sentence, delete the text in the parentheses.
+</P>
+<P>
+<B>Chapter 4</B>
+</P>
+Page 125: Figure 4-4 has been replaced.
+</P>
+<P>
+Page 126: Figure 4-5 has been replaced.
+</P>
+<P>
+Page 127: Figure 4-6 has been replaced.
+</P>
+<P>
+Page 151: The spacing of the first block of code has been changed and Sub Main () and End Sub () have both been moved back two spaces.
+</p>
+<p>
+Page 163: In the footnote, the word “This” has been deleted.
+</p>
+<p>
+Page 165: In the last paragraph, second sentence, the word “same” has been replaced with “equal.”
+</p>
+<p>
+<B>Chapter 5</B>
+</p>
+Page 179: In the first line of code, “sharp razor cut” should have a closing double quote.
+</p>
+<p>
+Page 184: The first bullet, “objects” should be replaced by “code.”
+</p>
+<p>
+Page 185: In the NOTE, the word “required” should be replaced by “used.”
+</p>
+<p>
+Page 191: In the NOTE, first sentence, insert “overridable, unshadowed” before “members”.
+</p>
+<p>
+Page 202: In code, the third- and second- to-last-lines should be moved left two spaces.
+</p>
+<p>
+Page 203: In the second paragraph, first sentence, a footnote should be inserted after the word “Equals,” which reads: “If you override equals you also should override a function called GetHashCode. See the documentation for more on hash.”
+</p>
+<p>
+Page 209: “First paragraph, second sentence, after the word “only” insert “code in.”
+</p>
+<p>
+Page 211: The last line of code should be moved left two spaces.
+</p>
+<p>
+<B>Chapter 6</B>
+</p>
+Page 238: In Figure 6-1, the last line in the last bubble should not have a space, and should read SendCongratLetter.
+</p>
+<p>
+Page 241: In the first batch of code, last line, the “h” should be lower case so it reads: mnuThing.Click.
+</p>
+<p>
+Page 245: First paragraph, both occurrences of “Event Handling” should end with a capital L, not a 1.
+</p>
+<p>
+Page 254: Second paragraph, the text after “Why?” should be deleted and replaced with the following which is much clearer:
+“Well, if you want to register a listener with an event source, feed the event source a special kind of delegate. This delegate encapsulates a reference to the listener object and a ‘pointer’ to the method inside the listener object that you want triggered when the event happens. Since the event source will have a delegate inside of it that encapsulates exactly the information  needed to callback the right member in the listener object, the .NET runtime has no problem doing the callback.”
+</p>
+<p>
+Page 256: The last line of code should be moved left and aligned with Sub Main.
+</p>
+<p>
+Page 257: The five lines of code after Sub Main() should be moved left two spaces, and ditto the six lines of code after ‘live with the default constructor.
+</p>
+<p>
+Page 260: Code line 5 ClasaName should be ClassName.
+</p>
+<p>
+Page 263: Ninth line of code, passe should be passed.
+</p>
+<p>
+<B>Chapter 7</B>
+</p>
+Page 270: The forth line of code should be aligned with the line below it. And in the tenth line, AS should be As.
+</p>
+<p>
+<B>Chapter 8</B>
+</p>
+Page 282: In step number two add this: (Use Ctrl + an arrow key for smaller movements.)
+</p>
+<p>
+Page 282: In step number three, the sentence in parentheses should read: (You can still use the Properties Window for more precise resizing, if need be.)
+</p>
+<p>
+Page 282: In the second step number three: Change the sentence to read: “Click where you want to position one corner of the control and then drag to the other corner position.” The next line should be deleted.
+</p>
+<p>
+Page 283: In the second-to-last line, replace “on a group basis” with “with the controls on the form.”
+</p>
+<p>
+Page 291: First NOTE, second sentence should read: In this case, you need to make sure there is a reference to the System.Winsows.Forms assembly and then make a call to the System.Windows.Forms.Application method as in the following code:”
+</p>
+<p>
+Page 291: Second NOTE, first sentence, insert the following text after MsgBox: “which is a method in the VB compatability layer”.
+</p>
+<p>
+<B>Chapter 9</B>
+</p>
+Page 349: In the TIP, the third sentence after the word “clause” insert: “alone”.
+</p>
+<p>
+Page 357: In the TIP, add Do so the first line of code reads:
+Do While myBinaryReader.PeekChar() <> -1
+</p>
+<p>
+Page 359: Last line, delete the semicolon at the end of the line so it reads: txt”)
+</p>
+<p>
+Page 362: Second paragraph, first line should read: “Every child class of your class and every nested class and every class that is used as an instance field class will … ”
+</p>
+<p>
+<B>Chapter 10</B>
+</p>
+Page 384: Second paragraph, third to last sentence should read: “Because we imported the Threading namespace, we do not need to use the long form Threading.ThreadMethod such as Threading.ThreadStart.”
+</p>
+<p>
+Page 387: Second line, insert “you can see” before “even low priority threads get a chance at CPU time:”
+</p>
+<p>
+Page 389: Second paragraph insert “Takes an Integer and” before “returns a Boolean value.”
+</p>
+<p>
+Page 405: Delete the space between code lines 16 and 17.
+</p>
+<p>
+<B>Chapter 11</B>
+</p>
+Page 424: last word on page, “bandwidth” should be deleted and replaced with “server resources and often bandwidth as well.”
+</p>
+<p>
+Page 426: At the end of line 12 of code, after Microsoft, insert a closing double quote, an & symbol, and a space before the underscore. On the next line of code, insert and opening double quote mark.
+</p>
+<p>
+</BODY>
+</HTML>
